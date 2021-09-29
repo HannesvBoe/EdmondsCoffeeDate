@@ -248,17 +248,14 @@ Like augment(), returns true iff the matching size was increased.'''
     return matching
 
 def compute_coffee_dates (Groups, number_dates):
-    persons = []
     dates = []
     G = nx.Graph()
     for group in Groups:
-        for person in group:
-            persons.append(person)
-    for group in Groups:
-        for person in group:
-            for other_person in persons:
-                if other_person not in group:
-                    G.add_edge(person, other_person)
+        for other_group in Groups:
+            if other_group != group:
+                for person in group:
+                    for other_person in other_group:
+                        G.add_edge(person, other_person)
     iter = 0
     while iter < number_dates:
         Matching = matching(G)
@@ -271,7 +268,7 @@ def compute_coffee_dates (Groups, number_dates):
 
 Groups = []
 num_groups = 0
-while num_groups < 1000:
+while num_groups < 100:
     group = []
     num_per_group = 0
     while num_per_group < 4:
@@ -280,7 +277,5 @@ while num_groups < 1000:
     Groups.append(group)
     num_groups+=1
 start = time.perf_counter()
-dates = compute_coffee_dates(Groups, 2)
+dates = compute_coffee_dates(Groups, 10)
 duration = time.perf_counter() - start
-print(dates)
-print (duration)
